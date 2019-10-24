@@ -43,13 +43,44 @@ Optionen:
     -x 		Fülle erst Spalten und dann Reihen.
 
 # cut [Option] [Datei]
-
+Beschreibung:
+  Extrahiere Spalten aus einer mit Trennzeichen formatierten Textdatei.
+  
 Optionen:
     -b --bytes			Angabe der Bytepositionen
     -c --characters		Angabe der Zeichenpositionen (entspricht derzeit -b)
     -d --delimiter		Angabe des Trennzeichens (Delimiter) anstelle des Tabulators (Standard)
     -f --fields			Angabe der zu extrahierenden Felder
     -s --only-delimited		Keine Ausgabe von Zeilen ohne Trennzeichen (Delimiter)
+
+# du [OPTIONEN] [DATEIEN]
+Beschreibung:
+  disk usage gibt den belegten Festplatten-Platz an. 
+  Der Befehl df zeigt dagegen den freien Festplattenplatz an.
+
+Optionen:
+    -a 		--all 			gibt die Belegung für alle Dateien, nicht nur Verzeichnisse an
+		--apparent-size 	gibt die eigentliche Dateigröße an, statt der Belegung der Festplatte. Wenn diese normalerweise kleiner ist, kann sie auch aufgrund von Löchern in "verteilten" Dateien, indirekten Blöcken und Ähnlichem, größer sein
+    -B 		--block-size=GRößE 	verwendet GRößE-byte Blöcke
+    -b 		--bytes 		entspricht --apparent-size --block-size=1
+    -c 		--total 		erstellt die Gesamtgröße
+    -D 		--dereference-args 	dereferenziert Dateien, die symbolische Links sind
+    -h 		--human-readable 	gibt die Größen in verständlichem Format an (wie 1K 234M oder 2G)
+		--si 			wie -h, aber mit Vielfachen von 1000 statt 1024
+    -k 					entspricht --block-size=1K (Standard)
+    -l 		--count-links 		zählt die Größen mehrmals, wenn es sich um Hard-Links handelt
+    -L 		--dereference 		dereferenziert alle symbolischen Links
+    -P 		--no-dereference 	symbolischen Links nicht folgen (dies ist die Standardeinstellung)
+    -0 		--null 			beendet jede Ausgabezeile mit einem 0 Byte Zeichen, statt mit einem newline
+    -S 		--separate-dirs 	die Größe der Unterverzeichnisse nicht miteinbeziehen
+    -s 		--summarize 		gibt nur die Gesamtgröße für jedes Argument an
+    -x 		--one-file-system 	überspringt Verzeichnisse, die in einem anderen Dateisystem liegen
+    -X Datei 	--exclude-from=DATEI 	schließt alle Dateien aus der Untersuchung aus, die auf ein Muster aus DATEI passen
+		--exclude=MUSTER 	schließt Dateien aus, auf die MUSTER passt
+		--max-depth=N 		gibt die Gesamtgröße eines Verzeichnisses nur aus, wenn es nicht tiefer als N Ebenen unter dem übergebenen Argument liegt. --max-depth=0 entspricht --summarize
+    -m 					entspricht --block-size=1M (veraltet)
+		--help 			gibt den Hilfe-Text aus
+		--version 		gibt die Versionsinformationen aus
 
 # grep [Optionen] Muster [Datei...] ODER grep [Optionen] [-e Muster | -f Datei] [Datei...]
   egrep entspricht grep -E (obige Beschreibung von regular expressions bezog sich auf diese Variante)
