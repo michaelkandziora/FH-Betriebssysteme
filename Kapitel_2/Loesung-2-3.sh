@@ -5,11 +5,11 @@
 # 
 #         USAGE: ./ 
 # 
-#   DESCRIPTION: Aufgabe 2.3
+#   DESCRIPTION: Betriebssysteme 2 - Praktikum - Aufgabe 2.3
 #
-#								 Erstellen Sie aus der /etc/passwd Datei mit Hilfe von cut eine
-#								 Datei "benutzer",  die die Liste aller aufsteigend sortierten
-#								 Benutzernamen enthält.
+#		 Erstellen Sie aus der /etc/passwd Datei mit Hilfe von cut eine
+#		 Datei "benutzer",  die die Liste aller aufsteigend sortierten
+#		 Benutzernamen enthält.
 # 
 #       OPTIONS: ---
 #  REQUIREMENTS: ---

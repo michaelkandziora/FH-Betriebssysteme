@@ -3,14 +3,14 @@
 #
 #          FILE: Loesung-2-1-6.sh
 # 
-#         USAGE: ./Loesung-2-1-6.sh 
+#         USAGE: ./
 # 
-#   DESCRIPTION: Bash-Lösung für 2.1.6:
+#   DESCRIPTION: Betriebssysteme 2 - Praktikum - Aufgabe 2.1.6
 #
-#								 Nur Zeilen mit dem Namen "Hans" und "Wolf" aus der
-#								 Datei "phone.book" ausgeben.
-#								 Stellen Sie sicher,  dass genau diese beiden Namen 
-#								 in der ersten Spalte gesucht werden. 
+#		Nur Zeilen mit dem Namen "Hans" und "Wolf" aus der
+#		Datei "phone.book" ausgeben.
+#		Stellen Sie sicher,  dass genau diese beiden Namen 
+#		in der ersten Spalte gesucht werden. 
 #
 #       OPTIONS: ---
 #  REQUIREMENTS: ---
@@ -24,5 +24,7 @@
 
 set -o nounset                              # Treat unset variables as an error
 
-# Ausgabe nicht richtig,  "Hans-Werner/Hans-Dieter" werden mit ausgegeben.
-cat phone.book | column -t -s! | sort -k1 | grep -e "Hans" -e "Wolf" -w
+#-------------------------------------------------------------------------------
+# Gebe nur ganze Wörter mit Hans ohne Bindestrich oder Wolf aus.
+#-------------------------------------------------------------------------------
+column -t -s! phone.book | egrep "Hans[^-]|\<Wolf\>"

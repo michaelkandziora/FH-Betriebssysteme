@@ -1,14 +1,15 @@
 #!/bin/bash - 
 #===============================================================================
 #
-#          FILE: ./Loesung-2-2-3.sh
+#          FILE: ./Loesung-2-5.sh
 # 
 #         USAGE: ./ 
 # 
-#   DESCRIPTION: Betriebssysteme 2 - Praktikum - Aufgabe 2.2.3
-# 
-#		 Erzeugen Sie eine nach Namen sortierte Liste aller Studierenden
-#		 mit der Note HD.
+#   DESCRIPTION: Betriebssysteme 2 - Praktikum - Aufgabe 2.5
+#
+#		 Erstelle mit Hilfe von "ls" eine nach fallender Größe geordnete
+#		 Liste aller Dateien im umfangreichsten Verzeichnis unterhalb von
+ #		 "/usr". Zeigen Sie die Liste mit dem pager "less" an.
 # 
 #       OPTIONS: ---
 #  REQUIREMENTS: ---
@@ -16,13 +17,14 @@
 #         NOTES: ---
 #        AUTHOR: Michael Kandziora, 
 #  ORGANIZATION: FH Südwestfalen, Iserlohn, Germany
-#       CREATED: 24.10.2019 14:52
+#       CREATED: 24.10.2019 15:48
 #      REVISION:  ---
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
 
+
 #-------------------------------------------------------------------------------
-# Datei Inhalt -> Tabelle erstellen(-t),  Trennzeichen(-s,) -> Nur ganze Wörter mit "HD" -> Sortiere Nachname aufsteigend, Vorname aufsteigend
+# -S sortiert absteigend nach Größe, -s gibt die Größe mit an.
 #-------------------------------------------------------------------------------
-cat results.csv | column -s, -t | grep -e "\<HD\>" | sort -k2 -k3
+ls -Ss /usr/lib64 | less

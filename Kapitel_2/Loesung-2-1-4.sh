@@ -1,14 +1,13 @@
 #!/bin/bash - 
 #===============================================================================
 #
-#          FILE: ./Loesung-2-2-3.sh
+#          FILE: ./Loesung-2-1-4.sh
 # 
 #         USAGE: ./ 
 # 
-#   DESCRIPTION: Betriebssysteme 2 - Praktikum - Aufgabe 2.2.3
-# 
-#		 Erzeugen Sie eine nach Namen sortierte Liste aller Studierenden
-#		 mit der Note HD.
+#   DESCRIPTION: Betriebssysteme 2 - Praktikum - Aufgabe 2.1.4
+#
+#		 Alle Ausrufezeichen der Datei "phone.book" in Doppelpunkte umwandeln.
 # 
 #       OPTIONS: ---
 #  REQUIREMENTS: ---
@@ -16,13 +15,15 @@
 #         NOTES: ---
 #        AUTHOR: Michael Kandziora, 
 #  ORGANIZATION: FH Südwestfalen, Iserlohn, Germany
-#       CREATED: 24.10.2019 14:52
+#       CREATED: 24.10.2019 15:04
 #      REVISION:  ---
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
 
+
 #-------------------------------------------------------------------------------
-# Datei Inhalt -> Tabelle erstellen(-t),  Trennzeichen(-s,) -> Nur ganze Wörter mit "HD" -> Sortiere Nachname aufsteigend, Vorname aufsteigend
+# Inhalt der Datei ausgeben -> Wandle alle "!" in ":" um
 #-------------------------------------------------------------------------------
-cat results.csv | column -s, -t | grep -e "\<HD\>" | sort -k2 -k3
+cat phone.book | tr ! :
+

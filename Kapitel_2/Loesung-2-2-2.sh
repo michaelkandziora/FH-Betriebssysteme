@@ -5,10 +5,10 @@
 # 
 #         USAGE: ./Loesung-2-2-2.sh 
 # 
-#   DESCRIPTION: Aufgabe 2.2.2
-#								 
-# 							 Erzeugen Sie eine aufsteigend sortierte Liste aller
-#								 vorkommenden Matrikelnummern (aus der Datei: results.csv).
+#   DESCRIPTION: Betriebssysteme 2 - Praktikum - Aufgabe 2.2.2
+# 
+# 		 Erzeugen Sie eine aufsteigend sortierte Liste aller
+#		 vorkommenden Matrikelnummern (aus der Datei: results.csv).
 # 
 #       OPTIONS: ---
 #  REQUIREMENTS: ---

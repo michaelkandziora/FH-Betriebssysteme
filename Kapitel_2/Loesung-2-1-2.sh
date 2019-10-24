@@ -5,13 +5,15 @@
 # 
 #         USAGE: ./Loesung-2-1-2.sh 
 # 
-#   DESCRIPTION: 
+#   DESCRIPTION: Betriebssysteme 2 - Praktikum - Aufgabe 2.1.2
+#
+#		 Sortieren der Datei "phone.book" nach fallenden Telefonnummern.
 # 
 #       OPTIONS: ---
 #  REQUIREMENTS: ---
 #          BUGS: ---
 #         NOTES: ---
-#        AUTHOR: Your Name (), 
+#        AUTHOR: Michael Kandziora, 
 #  ORGANIZATION: FH Südwestfalen, Iserlohn, Germany
 #       CREATED: 23.10.2019 14:54
 #      REVISION:  ---
@@ -19,4 +21,7 @@
 
 set -o nounset                              # Treat unset variables as an error
 
-cat phone.book | column -t -s! | sort -k2 -n
+#-------------------------------------------------------------------------------
+# Datei Inhalt -> Tabelle(-t), Separator(-s!) -> Sortiere Nummern(-n) absteigend(-r), 2. Spalte(-k2)
+#-------------------------------------------------------------------------------
+cat phone.book | column -t -s! | sort -k2 -n -r
