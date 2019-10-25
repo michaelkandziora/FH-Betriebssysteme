@@ -24,4 +24,4 @@ set -o nounset                              # Treat unset variables as an error
 #-------------------------------------------------------------------------------
 # Datei Inhalt -> Tabelle(-t), Separator(-s!) -> Sortiere Nummern(-n) absteigend(-r), 2. Spalte(-k2)
 #-------------------------------------------------------------------------------
-cat phone.book | column -t -s! | sort -k2 -n -r
+cat phone.book | sort -t! -k2 -n -r | column -t -s!

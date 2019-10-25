@@ -27,4 +27,4 @@ set -o nounset                              # Treat unset variables as an error
 #-------------------------------------------------------------------------------
 # Gebe nur ganze Wörter mit Hans ohne Bindestrich oder Wolf aus.
 #-------------------------------------------------------------------------------
-column -t -s! phone.book | egrep "Hans[^-]|\<Wolf\>"
+grep -e Hans! -e Wolf! phone.book

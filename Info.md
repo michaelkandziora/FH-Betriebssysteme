@@ -146,6 +146,7 @@ Optionen:
     -o --output=FILE		Ausgabe von sort in eine Datei
     -r --reverse		Sortiere in umgekehrter Reihenfolge
     -u --unique			Sortierung ohne doppelte Zeilen
+    -t				Trennzeichen definieren
 
 # tr [OPTION] [ZEICHENFOLGE1] [ZEICHENFOLGE2]
 Beschreibung:

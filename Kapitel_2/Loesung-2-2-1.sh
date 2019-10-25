@@ -24,7 +24,6 @@ set -o nounset                              # Treat unset variables as an error
 
 
 #-------------------------------------------------------------------------------
-# Befehl cat gibt den Inhalt der Datei aus. 
-# Schalter -b gibt eine Zeilennummer für nicht leere Zeilen an.
+# Inhalt der Datei -> Prüfe nach Gültigkeit -> Zähle Zeilen
 #-------------------------------------------------------------------------------
-cat -b results.csv
+cat results.csv | egrep "^[A-Z][0-9]{1,5},([A-Z -]+,){2}(C|F|D|HD|P|AF),[0-9]+(\.[0-9]{1,3})?,CA18$" | wc --lines

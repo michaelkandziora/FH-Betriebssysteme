@@ -25,4 +25,4 @@ set -o nounset                              # Treat unset variables as an error
 #-------------------------------------------------------------------------------
 # Datei Inhalt -> Tabelle erstellen(-t),  Trennzeichen(-s,) -> Nur ganze Wörter mit "HD" -> Sortiere Nachname aufsteigend, Vorname aufsteigend
 #-------------------------------------------------------------------------------
-cat results.csv | column -s, -t | grep -e "\<HD\>" | sort -k2 -k3
+cat results.csv | egrep "^[A-Z][0-9]{1,5},([A-Z -]+,){2}(HD),[0-9]+(\.[0-9]{1,3})?,CA18$" | sort -t, -k2 -k3 | column -s, -t

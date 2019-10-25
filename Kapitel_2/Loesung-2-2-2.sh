@@ -23,7 +23,7 @@
 set -o nounset                              # Treat unset variables as an error
 
 #-------------------------------------------------------------------------------------------
-# Inhalt der Datei -> Tabelle erstellen mit Trennzeichen "," -> Sortieren nach erster Spalte
+# Inhalt der Datei -> Prüfe nach Gültigkeit -> Entnehme erstes Feld (Matr.Nr.)
 #-------------------------------------------------------------------------------------------
-cat results.csv | column -s, -t | sort -k1
+cat results.csv | egrep "^[A-Z][0-9]{1,5},([A-Z -]+,){2}(C|F|D|HD|P|AF),[0-9]+(\.[0-9]{1,3})?,CA18$" | cut -d, -f1
 

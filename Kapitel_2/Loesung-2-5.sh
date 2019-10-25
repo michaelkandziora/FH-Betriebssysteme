@@ -27,4 +27,4 @@ set -o nounset                              # Treat unset variables as an error
 #-------------------------------------------------------------------------------
 # -S sortiert absteigend nach Größe, -s gibt die Größe mit an.
 #-------------------------------------------------------------------------------
-ls -Ss /usr/lib64 | less
+ls -la --sort=size /usr/lib64 | egrep '^-' | less

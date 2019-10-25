@@ -26,7 +26,9 @@ set -o nounset                              # Treat unset variables as an error
 
 
 #-------------------------------------------------------------------------------
-# Zeige Unterverzeichnisse von /usr 1. Ebene(--max-depth=1) mit Größe in SI Einheit(-h) 
+# Zeige Unterverzeichnisse von /usr 1. Ebene(--max-depth=1) mit Größe in Bytes(-b) 
 #  und nur Größen der einzel Verzeichnisse nicht die Gesamtgröße(-S).
 #-------------------------------------------------------------------------------
-du -h -S --max-depth=1 /usr | sort -h -r | less
+sudo du -b -S --max-depth=1 /usr | sort --sort=human-numeric --reverse | less
+
+#du -h -S --max-depth=1 /usr 2>&1 | grep --invert-match "Keine Berechtigung" | sort --sort=human-numeric --reverse | less
