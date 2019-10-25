@@ -1,12 +1,12 @@
-### INFO DOKUMENT
+# INFO DOKUMENT
 
 ## GIT Befehle
-# Dateien/Verzeichnisse zum Repository hinzufügen
+### Dateien/Verzeichnisse zum Repository hinzufügen
 git add *
 git commit -m "Info.md"
 git push -u origin master
 
-# Dateien/Verzeichnisse vom Repository entfernen
+### Dateien/Verzeichnisse vom Repository entfernen
 git rm Aufgabe_1_3.txt
 git commit -m "Entfernen von Aufgabe_1_3.txt"
 git push -u origin master
@@ -14,7 +14,7 @@ git push -u origin master
 
 ## Vokabelheft
 
-# cat [Optionen] [Dateien]
+### cat [Optionen] [Dateien]
 Beschreibung:
   Befehl zum Ausgeben von Datei inhalten.
 
@@ -31,7 +31,7 @@ Optionen:
        --help			Hilfe anzeigen
        --version		Versionsnummer anzeigen
        
-# column [-tx] [-c columns] [-s sep] [file ...] 
+### column [-tx] [-c columns] [-s sep] [file ...] 
 Beschreibung:
   Befehl zum erstellen einer Tabelle aus dem Inhalt einer Datei.
   Als Standardtrennzeichen wird das Leerzeichen verwendet.
@@ -42,7 +42,7 @@ Optionen:
     -t 		Definierte die Anzahl der Spalten aus der Eingangsdatei und erstelle eine Tabelle. Als Trennzeichen wird das Leerzeichen verwendet (Standard).
     -x 		Fülle erst Spalten und dann Reihen.
 
-# cut [Option] [Datei]
+### cut [Option] [Datei]
 Beschreibung:
   Extrahiere Spalten aus einer mit Trennzeichen formatierten Textdatei.
   
@@ -82,7 +82,7 @@ Optionen:
 		--help 			gibt den Hilfe-Text aus
 		--version 		gibt die Versionsinformationen aus
 
-# grep [Optionen] Muster [Datei...] ODER grep [Optionen] [-e Muster | -f Datei] [Datei...]
+### grep [Optionen] Muster [Datei...] ODER grep [Optionen] [-e Muster | -f Datei] [Datei...]
   egrep entspricht grep -E (obige Beschreibung von regular expressions bezog sich auf diese Variante)
   fgrep entspricht grep -F
   rgrep entspricht grep -r 
@@ -116,7 +116,7 @@ Optionen:
     -w 		--word-regexp 		wählt nur solche Zeilen aus, deren Treffer aus vollständigen Wörtern bestehen.
 
 
-# head [Option] [Datei] 
+### head [Option] [Datei] 
 Beschreibung:
   Befehl zum Ausgeben von n Zeilen aus einer Datei.
   
@@ -130,7 +130,7 @@ Optionen:
     -v oder 	--verbose 		Kopfzeilen mit Dateinamen immer ausgeben
 		--version 		Ausgabe der Versionsinformationen 
 
-# sort [Option] [Datei]
+### sort [Option] [Datei]
 Beschreibung:
   Befehl zum sortieren.
 
@@ -148,7 +148,7 @@ Optionen:
     -u --unique			Sortierung ohne doppelte Zeilen
     -t				Trennzeichen definieren
 
-# tr [OPTION] [ZEICHENFOLGE1] [ZEICHENFOLGE2]
+### tr [OPTION] [ZEICHENFOLGE1] [ZEICHENFOLGE2]
 Beschreibung:
   Befehl zum ersetzen von Zeichen/Zeichenfolgen in einer Datei.
 
@@ -158,7 +158,9 @@ Optionen:
     -s 	   --squeeze-repeats 	Mehrere identische aufeinanderfolgende Zeichen durch ein einzelnes ersetzen
     -t 	   --truncate-set1 	Beschneide zunächst den ersten Datensatz auf die Länge des zweiten Datensatzes
 
-# updatedb
+### updatedb
+
+### wc
 
 
 
