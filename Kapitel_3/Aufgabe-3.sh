@@ -5,7 +5,8 @@
 # 
 #         USAGE: ./Aufgabe-3.sh 
 # 
-#   DESCRIPTION: 
+#   DESCRIPTION: Dieses Skript führt die benötigten Befehle fuer das Aufgabenblatt 3 aus.
+#		 Es beinhaltet nicht die Aufgabe 3.3.1 und alles ab 3.4 .
 # 
 #       OPTIONS: ---
 #  REQUIREMENTS: ---
@@ -20,9 +21,6 @@
 set -o nounset                              # Treat unset variables as an error
 
 
-#-------------------------------------------------------------------------------
-# 
-#-------------------------------------------------------------------------------
 	echo -e "\n\tAufgabe 3.1"
 	echo -e "\n\t------------------\n"
 
