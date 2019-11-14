@@ -21,29 +21,30 @@ set -o nounset                              # Treat unset variables as an error
 
 
 #-------------------------------------------------------------------------------
-# Aufruf / Anzahl der Aufrufparameter überprüfen
+# Unterverzeichnisse ermitteln
 #-------------------------------------------------------------------------------
-if [ ${#} -lt 1 ]
-	then
-		echo -e "\n\tAufruf: $0 Anzahl_der_Verzeichnisse\n"
-		exit 1
-fi
+liste=$(find -type d -name "[^.]*")
+
 
 
 #-------------------------------------------------------------------------------
-# Verzeichnisse anlegen und zählen
+# Kopieren 
 #-------------------------------------------------------------------------------
-anzahl=0
-erfolg=0
+zaehler=0
 
-while [ $anzahl -lt $1 ]
-do
-	rmdir d$anzahl && ((erfolg++))
-	((anzahl++))
-done
+  for element in $liste 
+  do 
+    if [ ! -d "$element" ] && [ ! -w "$element" ]
+    then
+      echo -e "\n\t"$element" ist kein Ordner oder nicht lesbar.\n"
+      exit 4
+    fi
+    
+    rm -r $element && ((zaehler++))
+  done
 
 
 #-------------------------------------------------------------------------------
 # Kontrollausgabe
 #-------------------------------------------------------------------------------
-echo -e "\n${erfolg}/${anzahl} Verzeichnisse entfernt\n"
+echo -e "\n${zaehler} Verzeichnisse entfernt\n"

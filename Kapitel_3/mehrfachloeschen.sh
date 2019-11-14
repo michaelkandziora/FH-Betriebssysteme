@@ -40,6 +40,24 @@ then
 fi
 
 #-------------------------------------------------------------------------------
+# Prüfe, ob die zu loeschende Datei eine Datei ist
+#-------------------------------------------------------------------------------
+if [ ! -f "$1" ]
+then
+	echo -e "\n\t"$1" ist keine Datei.\n"
+	exit 3
+fi
+
+#-------------------------------------------------------------------------------
+# Prüfe, ob die zu loeschende Datei lesbar ist
+#-------------------------------------------------------------------------------
+if [ ! -w "$1" ]
+then
+	echo -e "\n\t"$1" ist nicht schreibbar.\n"
+	exit 3
+fi
+
+#-------------------------------------------------------------------------------
 # Unterverzeichnisse ermitteln
 #-------------------------------------------------------------------------------
 liste=$(find -type d -name "[^.]*")
@@ -50,7 +68,16 @@ liste=$(find -type d -name "[^.]*")
 #-------------------------------------------------------------------------------
 zaehler=0
 
-for element in $liste ; do rm $element/$1 && ((zaehler++)) ; done
+  for element in $liste 
+  do 
+    if [ ! -d "$element" ] && [ ! -w "$element" ] && [ ! -w "$1" ]
+    then
+      echo -e "\n\t"$element" ist kein Ordner oder nicht lesbar.\n"
+      exit 4
+    fi
+    
+    rm $element/"$1" && ((zaehler++))
+  done
 
 #-------------------------------------------------------------------------------
 # Kontrollausgabe

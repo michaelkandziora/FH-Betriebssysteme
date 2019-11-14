@@ -236,15 +236,15 @@ then
 	echo -e "\n"
 
 	read -p "grep [*]* < /etc/passwd"
-	grep [*]* < /etc/passwd
+	grep -c -e "bash" < /etc/passwd
 	echo -e "\n"
 
 	read -p "grep [*]* /etc/passwd"
-	grep [*]* /etc/passwd
+	grep -c -e "bash" /etc/passwd
 	echo -e "\n"
 
 	read -p "grep -n [*]* /etc/passwd | less"
-	grep -n [*]* /etc/passwd | less
+	cat | grep -n -e "bash" /etc/passwd
 
 fi
 	

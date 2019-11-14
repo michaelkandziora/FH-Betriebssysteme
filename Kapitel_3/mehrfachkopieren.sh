@@ -35,8 +35,26 @@ fi
 #-------------------------------------------------------------------------------
 if [ ! -e "$1" ]
 then
-	echo -e "\n\t$1 existiert nicht.\n"
+	echo -e "\n\t"$1" existiert nicht.\n"
 	exit 2
+fi
+
+#-------------------------------------------------------------------------------
+# Prüfe, ob die zu kopierende Datei eine Datei ist
+#-------------------------------------------------------------------------------
+if [ ! -f "$1" ]
+then
+	echo -e "\n\t"$1" ist keine Datei.\n"
+	exit 3
+fi
+
+#-------------------------------------------------------------------------------
+# Prüfe, ob die zu kopierende Datei lesbar ist
+#-------------------------------------------------------------------------------
+if [ ! -r "$1" ]
+then
+	echo -e "\n\t"$1" ist nicht lesbar.\n"
+	exit 3
 fi
 
 #-------------------------------------------------------------------------------
@@ -50,7 +68,17 @@ liste=$(find -type d -name "[^.]*")
 #-------------------------------------------------------------------------------
 zaehler=0
 
-for element in $liste ; do cp $1 $element/$1 && ((zaehler++)) ; done
+
+  for element in $liste 
+  do 
+    if [ ! -d "$element" ] && [ ! -w "$element" ]
+    then
+      echo -e "\n\t"$element" ist kein Ordner oder nicht lesbar.\n"
+      exit 4
+    fi
+    
+    cp "$1" $element/"$1" && ((zaehler++))
+  done
 
 
 #-------------------------------------------------------------------------------
