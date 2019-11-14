@@ -71,7 +71,8 @@ then
 
 	mkdir ./3-3-2
 	cd ./3-3-2
-	touch feb86 jan12.89 jan19.89 jan26.89 jan5.89 jan85 jan86 jan87 jan88 mar88 memo1 memo10 memo2 memo2.sv
+	touch jan{85..88} memo{1,10,2,2.sv} feb86 mar88 jan{5,12,19,26}.89 
+	#touch feb86 jan12.89 jan19.89 jan26.89 jan5.89 jan85 jan86 jan87 jan88 mar88 memo1 memo10 memo2 memo2.sv
 	echo -e "\n"
 	
 	read -p "echo *"
