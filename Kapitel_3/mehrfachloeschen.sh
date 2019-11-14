@@ -31,7 +31,7 @@ then
 fi
 
 #-------------------------------------------------------------------------------
-# Prüfe, ob die zu kopierende Datei existiert
+# Prüfe, ob die zu loeschende Datei existiert
 #-------------------------------------------------------------------------------
 if [ ! -e "$1" ]
 then
