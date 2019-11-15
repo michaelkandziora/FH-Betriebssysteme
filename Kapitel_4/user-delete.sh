@@ -56,7 +56,7 @@ u_loginname=""
 while read line; do
 	
 	# Baue den Login-Namen des zu erstellenden Nutzers
-	u_loginname="$(echo $line | cut -d: -f1 | tr "[A-Z]" "[a-z]")"
+	u_loginname="$(echo $line | cut -d: -f4 | tr "[A-Z]" "[a-z]")"
 	
 	# Debug Ausgabe der Variablen für User u_xxx
 	#printf "%s\n" $u_loginname
@@ -65,7 +65,7 @@ while read line; do
 	if  [ $? -eq 0 ];
 	then
 		# Lösche den Benutzer
-		userdel "$u_loginname"
+		userdel -r "$u_loginname" >& /dev/null
 		if [ $? == 0 ] 
 		then
 		  printf "\n\t%s erfolgreich gelöscht.\n" $u_loginname
@@ -82,4 +82,7 @@ while read line; do
 done < $file
 
 printf "\n\t%d von %d Benutzer erfolgreich gelöscht\n" $u_count $(cat "$file" | wc -l)
+
+rmdir /home/fhswf
+rm $file
 
