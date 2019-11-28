@@ -3,15 +3,24 @@
 #
 #          FILE: user-add-2.sh
 # 
-#         USAGE: ./user-add-2.sh 
+#         USAGE: ./user-add-2.sh <user+num.txt>
 # 
-#   DESCRIPTION: 
+#   DESCRIPTION: Dieses Skript erstellt aus den in der übergebenen Text-Datei 
+#		 enthaltenen Daten(Vorname,Nachname,Matr.Nr.) Benutzer 
+#		 inkl. ihrer Homeverzeichnisse.
 # 
+#		 --- Exit-Codes ---
+#		 1 - Skript wurde nicht als Root ausgeführt.
+#		 2 - Parameter 1 ist keine Datei oder nicht lesbar.
+#		 3 - Log-Datei konnte nicht erzeugt werden.
+#		 4 - UID existiert bereits.
+#		 5 - Benutzer konnte nicht erstellt werden.
+#
 #       OPTIONS: ---
 #  REQUIREMENTS: ---
 #          BUGS: ---
 #         NOTES: ---
-#        AUTHOR: Your Name (), 
+#        AUTHOR: Michael Kandziora, kandziora.michael@fh-swf.de
 #  ORGANIZATION: FH Südwestfalen, Iserlohn, Germany
 #       CREATED: 15.11.2019 00:01
 #      REVISION:  ---
@@ -54,19 +63,13 @@ then
   echo Log-Datei erfolgreich erstellt.
 else
   echo -e "\n\tLog-Datei wurde nicht erstellt.\n"
+  exit 3
 fi
 
 
 #-------------------------------------------------------------------------------
 # Benutzer anlegen
 #-------------------------------------------------------------------------------
-
-#egrep "^$username" /etc/passwd > /dev/null
-#if  [ $? -eq 0 ];
-#then
-#	echo -e "\n\tBenutzer "$username" existiert bereits.\n"
-#	exit 3
-#fi
 
 # DEFAULT PARAMETER
 D_SHELL="/bin/ksh"
@@ -92,9 +95,17 @@ mkdir $D_HOMEDIR
 
 while read -a line; do
 	
-	# User-ID
+	# Erzeuge User-ID, durch entnehmen der höchsten UID (3<x<60.000) + Inkrementierung
 	u_uid=$(awk -F: '$3<60000 { print $3 }' /etc/passwd | sort -n | tail -1)
 	((u_uid++))
+	
+	# Prüfe ob UID bereits vorhanden ist
+	egrep "^$u_uid" /etc/passwd > /dev/null
+	if  [ $? -eq 0 ]
+	then
+		echo -e "\n\tUID existiert bereits.\n"
+		exit 4
+	fi
 	
 	# Baue den Login-Namen des zu erstellenden Nutzers
 	u_loginname="$(echo ${line[1]} | tr "[A-Z]" "[a-z]")"
@@ -140,10 +151,15 @@ while read -a line; do
 	  echo ${line[0]}:${line[1]}:${line[2]}:${u_loginname}:${u_password} >> $log_file
 	else
 	  echo -e "\n\tBenutzer konnte nicht erstellt werden.\n"
-	  exit 3
+	  exit 5
 	fi
 	
 done < $file
 
+
+#-------------------------------------------------------------------------------
+# Ausgabe: 
+# Erfolgreiche Terminierung des Skripts inkl. der Anzahl der erstellten Benutzer
+#-------------------------------------------------------------------------------
 echo "$u_count" von $(cat "$file" | wc -l) Benutzer erfolgreich erstellt
 
