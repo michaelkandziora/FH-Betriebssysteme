@@ -56,13 +56,19 @@ fi
 #-------------------------------------------------------------------------------
 # Erstelle die Log-Datei für die zuerstellenden Benutzer
 #-------------------------------------------------------------------------------
-touch user-added-`date +"%Y%m%d-%H%M%S"`.txt
+date=`date +"%Y%m%d-%H%M%S"`
+log_file=user-added-$date.txt
+touch $log_file
+exit_code=$?
 
-if [ $? == 0 ] 
+# Finde die zuletzt erzeugte Log-Datei
+#log_file=$(find user-added-* | sort -r | head -1)
+
+if [ $exit_code == 0 ] 
 then
-  echo Log-Datei erfolgreich erstellt.
+  echo Log-Datei "$log_file" erfolgreich erstellt.
 else
-  echo -e "\n\tLog-Datei wurde nicht erstellt.\n"
+  echo -e "\n\tLog-Datei "$log_file" wurde nicht erstellt. Code: $exit_code\n"
   exit 3
 fi
 
@@ -72,58 +78,72 @@ fi
 #-------------------------------------------------------------------------------
 
 # DEFAULT PARAMETER
-D_SHELL="/bin/ksh"
-D_GID=10
-D_COM="Student"
-D_HOMEDIR="/home/fhswf/"
+#D_GID=10
+#D_COM="Kommentar"
+#D_HOMEDIR="/home/fhswf/"
 
 # USER PARAMETER
 u_count=0
-u_uid=0
-u_gid=0
+#u_uid=0
+#u_gid=0
 u_loginname=""
 u_password=""
-u_homedir=""
-u_shell=""
+#u_homedir=""
 u_com=""
 
-# Finde die zuletzt erzeugte Log-Datei
-log_file=$(find user-added-* | sort -r | head -1)
-
 # Erstelle default Home-Directory
-mkdir $D_HOMEDIR
+#mkdir $D_HOMEDIR
 
-while read -a line; do
-	
-	# Erzeuge User-ID, durch entnehmen der höchsten UID (3<x<60.000) + Inkrementierung
-	u_uid=$(awk -F: '$3<60000 { print $3 }' /etc/passwd | sort -n | tail -1)
-	((u_uid++))
-	
-	# Prüfe ob UID bereits vorhanden ist
-	egrep "^$u_uid" /etc/passwd > /dev/null
-	if  [ $? -eq 0 ]
+while read vorname nachname matrikelnummer; do
+
+	# Überprüfe die eingelesenen Parameter
+	if [[ ! $vorname =~ ^[A-Za-z0-9]+$ ]]
 	then
-		echo -e "\n\tUID existiert bereits.\n"
+		echo -e "\n\t$vorname entspricht nicht den Anforderungen\n"
 		exit 4
 	fi
 	
+	# Überprüfe die eingelesenen Parameter
+	if [[ ! $nachname =~ ^[A-Za-z0-9]+$ ]]
+	then
+		echo -e "\n\t$nachname entspricht nicht den Anforderungen\n"
+		exit 4
+	fi
+	
+	# Überprüfe die eingelesenen Parameter
+	if [[ ! $matrikelnummer =~ ^[0-9]{8}$ ]]
+	then
+		echo -e "\n\t$matrikelnummer entspricht nicht den Anforderungen\n"
+		exit 4
+	fi
+	
+	# Erzeuge User-ID, durch entnehmen der höchsten UID (x<60.000) + Inkrementierung
+	#u_uid=$(awk -F: '$3<60000 { print $3 }' /etc/passwd | sort -n | tail -1)
+	#((u_uid++))
+	
+	# Prüfe ob UID bereits vorhanden ist
+	#egrep "^$u_uid" /etc/passwd > /dev/null
+	#exit_code=$?
+	#if  [ $exit_code -eq 0 ]
+	#then
+	#	echo -e "\n\tUID existiert bereits. Code: $exit_code\n"
+	#	exit 4
+	#fi
+	
 	# Baue den Login-Namen des zu erstellenden Nutzers
-	u_loginname="$(echo ${line[1]} | tr "[A-Z]" "[a-z]")"
+	u_loginname="$(echo $nachname | tr "[A-Z]" "[a-z]")"
 	
 	# Erzeuge ein Random Passwort
 	u_password=$(pwgen 8 1)
 	
 	# GROUP-ID
-	u_gid=${gid:-$D_GID}
+	#u_gid=${gid:-$D_GID}
 	
 	# Baue das Home-Directory des zu erstellenden Nutzers
-	u_homedir=${home:-$D_HOMEDIR${line[2]}}
-	
-	# Benutzershell
-	u_shell=${shell:-$D_SHELL}
+	#u_homedir=${home:-$D_HOMEDIR${matrikelnummer}}
 	
 	# Kommentar
-	u_com=${com:-${line[2]}}
+	#u_com=${com:-${matrikelnummer}}
 	
 	
 	
@@ -132,25 +152,39 @@ while read -a line; do
 	
 	
 	# Erstelle den Benutzer
-	useradd -u "$u_uid" -g "$u_gid" -c "$u_com" -s "$u_shell" -d "$u_homedir" "$u_loginname"
-	if [ $? == 0 ] 
+	#useradd -u "$u_uid" -g "$u_gid" -c "$u_com" -d "$u_homedir" "$u_loginname"
+	useradd -m -c $matrikelnummer "$u_loginname"
+	
+	exit_code=$?
+	if [ $exit_code -eq 0 ] 
 	then
 	  echo -e "\n\t$u_loginname erfolgreich angelegt."
 	  ((u_count++))
 	  
 	  # Erstelle HomeDir
-	  mkdir $u_homedir 
-	  chown $u_uid:$u_gid $u_homedir
+	  #mkdir $u_homedir 
+	  #chown $u_uid:$u_gid $u_homedir
 	  
 	  # Weise dem Benutzer das Passwort zu
 	  echo ${u_loginname}:${u_password} | chpasswd 2>/dev/null
-	  [ $? == 0 ] && echo -e "\tPasswort erfolgreich zugewiesen.\n"
-	
-	  # Speichere das Passwort in einer Datei
-	  # Format: Nachname Vorname Matrikelnummer Loginname Passwort
-	  echo ${line[0]}:${line[1]}:${line[2]}:${u_loginname}:${u_password} >> $log_file
+	  exit_code=$?
+	  
+	  if [ $exit_code -eq 0 ]
+	  then
+		echo -e "\tPasswort erfolgreich zugewiesen.\n"
+	    
+		# Speichere das Passwort in einer Datei
+		# Format: Nachname Vorname Matrikelnummer Loginname Passwort
+		echo $nachname:$vorname:$matrikelnummer:${u_loginname}:${u_password} >> $log_file
+	  else
+		echo -e "\tPasswort konnte nicht zugewiesen werden.\n"
+	    
+		# Speichere das Passwort in einer Datei
+		# Format: Nachname Vorname Matrikelnummer Loginname Passwort
+		echo $nachname:$vorname:$matrikelnummer:${u_loginname}:"Kein-Passwort" >> $log_file
+	  fi
 	else
-	  echo -e "\n\tBenutzer konnte nicht erstellt werden.\n"
+	  echo -e "\n\tBenutzer konnte nicht erstellt werden. Code: $exit_code\n"
 	  exit 5
 	fi
 	

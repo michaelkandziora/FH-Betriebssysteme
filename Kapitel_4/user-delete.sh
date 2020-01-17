@@ -51,21 +51,40 @@ then
 fi
 
 #-------------------------------------------------------------------------------
-# Benutzer anlegen
+# Erstelle die Log-Datei für die zu löschenden Benutzer
+#-------------------------------------------------------------------------------
+date=`date +"%Y%m%d-%H%M%S"`
+log_file=user-removed-$date.txt
+touch $log_file
+
+if [ $? == 0 ] 
+then
+  echo Log-Datei $log_file erfolgreich erstellt.
+else
+  echo -e "\n\tLog-Datei $log_file wurde nicht erstellt.\n"
+  exit 3
+fi
+
+#-------------------------------------------------------------------------------
+# Benutzer entfernen
 #-------------------------------------------------------------------------------
 
 # USER PARAMETER
 u_count=0
 u_loginname=""
-u_homedir=""
+#u_homedir=""
+u_com=""
 
 while read line; do
 	
-	# Baue den Login-Namen des zu erstellenden Nutzers
+	# Login-Namen des zu löschenden Nutzers
 	u_loginname="$(echo $line | cut -d: -f4 | tr "[A-Z]" "[a-z]")"
 	
-	# Baue den Login-Namen des zu erstellenden Nutzers
-	u_homedir="$(echo $line | cut -d: -f3)"
+	# Homedir des zu löschenden Nutzers
+	#u_homedir="$(echo $line | cut -d: -f3)"
+	
+	# Kommentar (Matrikelnummer) des zu erstellenden Nutzers
+	u_com="$(echo $line | cut -d: -f3)"
 	
 	# Debug Ausgabe der Variablen für User u_xxx
 	#printf "%s\n" $u_loginname
@@ -75,17 +94,18 @@ while read line; do
 	if  [ $? -eq 0 ];
 	then
 		# Lösche eventuell vorhandenen Inhalt im Homeverzeichnis des Benutzers
-		rm -r /home/fhswf/$u_homedir
-		if [ ! $? == 0 ] 
-		then
-		  echo -e "\n\t$u_loginname: Inhalt von $u_homedir konnte nicht gelöscht werden.\n"
-		  exit 3
-		fi
+		#rm -r /home/fhswf/$u_homedir
+		#if [ ! $? == 0 ] 
+		#then
+		#  echo -e "\n\t$u_loginname: Inhalt von $u_homedir konnte nicht gelöscht werden.\n"
+		#  exit 3
+		#fi
 		
 		# Lösche den Benutzer
 		userdel -r "$u_loginname" >& /dev/null
 		if [ $? == 0 ] 
 		then
+		  echo $u_loginname:$u_com >> $log_file
 		  printf "\n\t%s erfolgreich gelöscht.\n" $u_loginname
 		  ((u_count++))
 		else
