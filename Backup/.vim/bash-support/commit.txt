@@ -1,0 +1,5 @@
+Bash-Support: Adjusting end-of-line comments improved,  submenu renamed
+
+- Adjusting end-of-line comments improved.
+- Submenu 'Regexp' renamed to 'PatternMatching'. Appropriate hotkeys renamed.
+- Minor improvements and bug fixes.

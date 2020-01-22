@@ -1,0 +1,502 @@
+*textfilter.txt*             Several textfilters                 June 04 2009
+
+textfilter                                                        *textfilter*
+                             Plugin version 1.16
+                        for Vim version 6.0 and above
+                       Fritz Mehner  <mehner@fh-swf.de>
+
+Several text filters (mainly based on some GNU core utilities).
+
+ 1.     Usage                                   |textfilter-usage-gvim|
+ 1.1     Sort lines                             |textfilter-sort-lines|
+ 1.2     Number lines                           |textfilter-number-lines|
+ 1.3     Columnate list                         |textfilter-columnate-list|
+ 1.4     Sequence of numbers                    |textfilter-seq-of-numbers|
+ 1.5     Tabs to spaces                         |textfilter-tabs-to-spaces|
+ 1.6     Spaces to tabs                         |textfilter-spaces-to-tabs|
+ 1.7     Compress empty lines                   |textfilter-compress-lines|
+ 1.8     Fill lines                             |textfilter-fill-lines|
+ 1.9     Trim lines                             |textfilter-trim-lines|
+ 1.10    Left justify                           |textfilter-left-justify|
+ 1.11    Right justify                          |textfilter-right-justify|
+ 1.12    Save buffer with time stamp            |textfilter-add-time-stamp|
+ 1.13    Find longest line                      |textfilter-find-longest-line|
+ 1.14    Highlight text after given column      |textfilter-highlight-col|
+ 1.15    Split lines                            |textfilter-split-lines|
+ 1.16    Date and time                          |textfilter-date-time|
+ 2.     Files                                   |textfilter-files|  
+ 3.     Dependencies / GNU core utilities       |textfilter-depend|
+ 4.     Customization                           |textfilter-custom|
+ 5.     Release Notes                           |textfilter-release-notes|
+
+        How to add this help file to Vim's help |add-local-help|
+
+Everything in this plugin could be done with a pure Vim script. The core
+utilities are used because of their speed.  All core utilities have additional
+options. The options offered here are the most frequently used (I suppose).
+A few actions could not easily be done by core utilities. Sorting for example
+can use a marked region of screen columns as sort keys.
+
+==============================================================================
+1.  USAGE                                              *textfilter-usage-gvim*
+==============================================================================
+
+This is a GUI-only plugin mainly designed for LINUX/UNIX platforms. Most
+entries have at least 2 modes:
+ 
+Normal mode, insert mode: The whole file will be processed (sorted, ... ) !
+                          If the whole file does not fit into the current
+                          window the operation has to be confirmed.
+
+Visual mode:              The marked area will be processed.
+
+Block visual mode:        The marked block will be processed or used (only
+                          'left justify', 'right justify' and sort).
+
+------------------------------------------------------------------------------
+1.1  Menu entry  "sort lines"                          *textfilter-sort-lines*
+------------------------------------------------------------------------------
+The whole file or a marked area will be sorted. The menu entries
+    forwards -> reverse
+       alpha -> numeric
+  not unique -> unique
+can be used to change the sorting options. The option left of -> is active.
+
+Blockwise Visual mode. In this mode only the content of the marked area will
+be used as sort keys: 
+
+ apple    Code-033    885
+ banana   Code-013   3333
+ orange   Code-003    777
+               ^^^
+                 +----------------- marked area (3x3)
+
+Sorting (numeric, forward) gives 
+
+ orange   Code-003    777
+ banana   Code-013   3333
+ apple    Code-033    885
+
+The locale information specified by the environment affects sort order.  The
+environment variable $LANG is read and diplayed in one menu entry.  You can
+toggle between this locale and 'C' to  get  the  traditional sort order that
+uses native byte values. In this case sort runs as 
+  !env LC_ALL=C sort ...
+using the env(1) utility.
+
+------------------------------------------------------------------------------
+1.2  Menu entry  "number lines"                      *textfilter-number-lines*
+------------------------------------------------------------------------------
+Add line numbers to a complete file or to a marked area. The lines 
+
+aaaaaaaaaa
+bbbbbb 
+
+ccccccccccccc
+
+will look like this after line numbering:
+
+000001  aaaaaaaaaa
+000002  bbbbbb 
+000003  
+000004  ccccccccccccc
+
+The utility nl(1) is used with the option --bodynumbering=a  (number all
+lines).
+
+The entry
+  - number width
+sets the number of columns for line numbers. If the value is 0 the number of
+columns will be calculated from the range of the selected lines.
+
+The entry
+  - lead.zeros -> no lead.zeros
+toggles the generation of leading zeros (option --number-format=rz).
+
+------------------------------------------------------------------------------
+1.3  Menu entry  "columnate list"                  *textfilter-columnate-list*
+------------------------------------------------------------------------------
+The utility column(1) formats its input into multiple columns. Rows are filled
+before columns.  Empty lines are ignored. The separating columns consist of
+one blank. The following 6 lines 
+
+ vek3 createv ( double x, double y, double z );
+ vek3 sxv ( double s, vek3 v );
+ 
+ vek3 vaddv ( vek3 a, vek3 b );
+ vek3 vsubv ( vek3 a, vek3 b );
+ double length ( vek3 a );
+
+will be transformed into 5 lines:
+
+ vek3   createv ( double x, double y, double z );
+ vek3   sxv     ( double s, vek3   v  );
+ vek3   vaddv   ( vek3   a, vek3   b  );
+ vek3   vsubv   ( vek3   a, vek3   b  );
+ double length  ( vek3   a  );
+
+
+The command used is 'column -t ' .
+
+SEPARATORS.  The menu entry '- separator' asks for a list of separators. The
+default is the empty list. 
+With the separators ':' the lines
+
+ root:x:0:0:root:/root:/bin/bash
+ bin:x:1:1:bin:/bin:/bin/bash
+ daemon:x:2:2:Daemon:/sbin:/bin/bash
+
+will be transformed to
+
+ root   x 0 0 root   /root /bin/bash
+ bin    x 1 1 bin    /bin  /bin/bash
+ daemon x 2 2 Daemon /sbin /bin/bash
+ 
+The command used is 'column -t -s":" ' . The characters  '%' , '#' will be
+escaped by the plugin.
+
+------------------------------------------------------------------------------
+1.4  Menu entry  "sequence of numbers"             *textfilter-seq-of-numbers*
+------------------------------------------------------------------------------
+Generation of lists or tables of numbers, e.g. 
+
+      0  2  10  "%02d\n"
+      ^  ^  ^^  ^^^^^^^^
+      |  |  |   +-------  format string (as for C printf)
+      |  |  +-----------  last value
+      |  +--------------  increment
+      +-----------------  first value
+
+will generate the sequence 
+ 
+00
+02
+04
+06
+08
+10
+
+The first three numbers will be passed to the utility seq(1) .  The sequence
+generated by 'seq' is piped to the utility printf(1) .  The two commands are
+run in a modified environment with env(1) . This is needed to prevent 'seq'
+from generating floating point numbers (see below) with a separator other than
+'.' (e.g ',' in German) if you want to include them in a program. The complete
+command internally used looks like this:
+
+  env LANG=C seq 0 2 10 | env LANG=C xargs printf "%02d\n"  
+
+The format string after printf controls the output as in C printf (see the
+manual: man 3 printf ). 
+ 
+The above command example appears on the Vim command line and can be edited.
+The final command will be remembered and used the next time as a template. To
+clear it leave the command line with ESC.
+
+REMARK. Platform dependent escaping.                     *textfilter-escaping*
+Inside the format string some characters ( '%' , '#') have to be escaped to
+avoid getting expanded by the Vim command-line processor. This is done by the
+plugin itself. On a Linux system the escape sequence is '\\' (the default). On
+DOS/Windows '%' must be used. The escape character(s) can be configured with a
+global variable (see also |textfilter-custom|).  If needed put the following
+line into your .vimrc file :
+
+  let g:Filter_Escape  = '%'      " Dos/Windows
+
+----------------------------------------------------------------------------
+
+1.4.1  EXAMPLE : Floating point sequence
+The command
+
+  1  0.1  2   "  %3.1f Section: \n"    
+
+generates 10 lines as starting points for section headings:
+
+  1.0 Section: 
+  1.1 Section: 
+  1.2 Section: 
+  1.3 Section: 
+  1.4 Section: 
+  1.5 Section: 
+  1.6 Section: 
+  1.7 Section: 
+  1.8 Section: 
+  1.9 Section: 
+
+Note that the value 2.0 will not be reached due to a tiny inaccuracy in the
+binary representation of the increment value 0.1 and the incrementing used in
+'seq' !
+
+----------------------------------------------------------------------------
+
+1.4.2  EXAMPLE : hex values  
+The command 
+
+  0  8  127  "0x%02X, 0x%02X, 0x%02X, 0x%02X, \n"
+
+generates 4 lines, which could be used to initialize a C array :
+
+0x00, 0x08, 0x10, 0x18, 
+0x20, 0x28, 0x30, 0x38, 
+0x40, 0x48, 0x50, 0x58, 
+0x60, 0x68, 0x70, 0x78, 
+
+----------------------------------------------------------------------------
+
+1.4.3  EXAMPLE : powers of 2
+The command 
+
+  0  1  10  "(1<<%2d), \n" 
+
+generates 11 powers of 2 ( 1 ... 1024), e.g. for an array initialization (C):
+
+(1<< 0), 
+(1<< 1), 
+(1<< 2), 
+(1<< 3), 
+(1<< 4), 
+(1<< 5), 
+(1<< 6), 
+(1<< 7), 
+(1<< 8), 
+(1<< 9), 
+(1<<10), 
+
+
+------------------------------------------------------------------------------
+1.5  Menu entry  "tabs to spaces"                  *textfilter-tabs-to-spaces*
+------------------------------------------------------------------------------
+Tabs will be converted to spaces. The current value of 'tabstop' is used.  The
+option 'expandtabs' remains untouched.
+
+------------------------------------------------------------------------------
+1.6  Menu entry  "spaces to tabs"                  *textfilter-spaces-to-tabs*
+------------------------------------------------------------------------------
+Spaces will be converted to tabs. The current value of 'tabstop' is used.  The
+option 'expandtabs' remains untouched.
+
+------------------------------------------------------------------------------
+1.7  Menu entry  "compress empty lines"            *textfilter-compress-lines*
+------------------------------------------------------------------------------
+Consecutive empty lines (zero or more whitespaces) will be compresse into one
+empty line.
+
+------------------------------------------------------------------------------
+1.8  Menu entry  "fill lines (spaces)"                 *textfilter-fill-lines*
+------------------------------------------------------------------------------
+All lines from a marked area or from the whole file will be filled with spaces
+up to the length of the longest line.  The line ends can now be processed with
+block commands,
+
+------------------------------------------------------------------------------
+1.9  Menu entry  "trim trail. whitespace"             *textfilter-trim-lines*
+------------------------------------------------------------------------------
+Remove trailing whitespaces (marked area or whole file).
+
+------------------------------------------------------------------------------
+1.10  Menu entry  "left justify"                      *textfilter-left-justify*
+------------------------------------------------------------------------------
+All lines from a marked area or from the whole file will be left justified.
+Leading whitespaces are removed.
+
+BLOCKWISE VISUAL MODE - only the marked block will be left justified. The
+block has to be rectangular, but empty lines are allowed.
+
+  char  *s  =     "aaaaaaaaa";  /*  */
+  char  *t  = "bb";             /*  */
+
+  char  *u  =   "ccccccc;       /*  */
+               ^^^^^^^^^^^^^^^
+               marked block  
+gives
+
+  char  *s  = "aaaaaaaaa";      /*  */
+  char  *t  = "bb";             /*  */
+
+  char  *u  = "ccccccc;         /*  */
+               ^^^^^^^^^^^^^^^
+               left justified  
+
+Ragged lines can be filled with spaces (see "fill lines") before applying
+justification.
+ 
+------------------------------------------------------------------------------
+1.11  Menu entry  "right justify"                   *textfilter-right-justify*
+------------------------------------------------------------------------------
+All lines from a marked area or from the whole file will be right justified.
+The line width is the length the longest line.
+
+BLOCKWISE VISUAL MODE - only the marked block will be left justified. The
+block has to be rectangular, but empty lines are allowed.
+
+  int a = 2;        /*  */
+  int b = 23;       /*  */
+  int c = 99999;    /*  */
+  int x =    a+b+c; /*  */
+          ^^^^^^^^^
+          marked block  
+gives
+
+  int a =        2; /*  */
+  int b =       23; /*  */
+  int c =    99999; /*  */
+  int x =    a+b+c; /*  */
+          ^^^^^^^^^
+          right justified  
+
+Ragged lines can be filled with spaces (see "fill lines") before applying
+justification.
+
+If some lines above the last line do not reach the last marked column because
+they are to short they will be filled with spaces (line ends marked with $):
+
+  int a = 2;$
+  int b = 23;$
+  int c = 99999;$
+  int x =    a+b+c;       /* build the sum */$
+          ^^^^^^^^^
+          marked block  
+
+gives
+
+  int a =        2;$
+  int b =       23;$
+  int c =    99999;$
+  int x =    a+b+c;       /* build the sum */$
+          ^^^^^^^^^
+          right justified  
+
+------------------------------------------------------------------------------
+1.12  Save buffer with time stamp                  *textfilter-add-time-stamp*
+------------------------------------------------------------------------------
+Save the current buffer with a timestamp added to its name.  The default time
+format is '%y%m%d.%H%M%S' (see the manual page of the C function strftime()
+for the format).
+To change this put a different format into the file ~/vimrc , e.g.  
+
+  let g:Filter_TimestampFormat= '%H%M%S.%d%m%y'
+ 
+------------------------------------------------------------------------------
+1.13  Menu entry  "find longest line"           *textfilter-find-longest-line*
+------------------------------------------------------------------------------
+Searches for the longest line between the cursor position and the end of the
+buffer or inside a marked region. The result is shown in a message like this:
+
+  range 309-370 : longest line has number 314, length 78  
+    (13 line(s) of equal length below) 
+
+------------------------------------------------------------------------------
+1.14  Highlight text after given column             *textfilter-highlight-col*
+------------------------------------------------------------------------------
+Asks for a column number and highlights the text after this column.  This can
+be used to format a source file so that a given column is not exceeded (e.g.
+according to a style guide).
+All marked texts are also search patterns. Use 'n' or 'N' to jump to the next/
+previous occurrence.  
+The default column is 80.  To change this specify a different value in the
+file ~/vimrc , e.g.  
+
+  let g:Filter_HighlightAfterCol = '88'
+
+------------------------------------------------------------------------------
+1.15  Split lines                                     *textfilter-split-lines*
+------------------------------------------------------------------------------
+Split current line or marked lines into separate lines according to a regular
+expression. The default is '\s\+' , that is one or more whitespaces.
+The regular expression can be changed to another value with the menu entry
+'- split separator'.
+
+------------------------------------------------------------------------------
+1.16  Date and time                                     *textfilter-date-time*
+------------------------------------------------------------------------------
+
+The default format for date and time are as follows
+
+    date        '%x'         (locale's date representation, e.g., 12/31/99)
+    time        '%X'         (locale's time representation, e.g., 23:13:48)
+
+See the manual page of the C function strftime() for the format.  The accepted
+format depends on your system, thus this is not portable!  The maximum length
+of the result is 80 characters.
+
+User defined formats can be set using the following global variables in
+~/.vimrc ,  e.g.
+    let g:Filter_FormatDate            = '%D'
+    let g:Filter_FormatTime            = '%H:%M'
+
+Insert mode
+-----------
+Date and/or time will be inserted at cursor postion.
+
+Visual mode
+-----------
+The marked text will be replaced by date and/or time.
+
+Normal mode
+-----------
+The current line will be searched for a date, time, or date+time
+representation corresponding to the formats used (default or user defined).
+If there is a match the date/time string will be replaced by the current
+value.
+
+==============================================================================
+2.   FILES                                                  *textfilter-files*
+==============================================================================
+
+README.textfilter         Installation hints and release notes.
+doc/textfilter.txt        The help file for the local online help (this file).
+plugin/textfilter.vim     The textfilter plugin for gVim.
+
+
+==============================================================================
+3.  Dependencies / GNU core utilities                      *textfilter-depend*
+==============================================================================
+
+The following core utilities are used:
+
+  column    -  columnate lists
+  env       -  run a program in a modified environment (LANG=C)
+  nl        -  number lines of files
+  printf    -  format and print data
+  seq       -  print a sequence of numbers
+  sort      -  sort lines of text files
+  xargs     -  build and execute command lines from standard input
+
+All of them have additional options. See the manuals for further information.
+
+==============================================================================
+4.  Customization                                          *textfilter-custom*
+==============================================================================
+
+A few  global variables are checked by the script. They can be used to
+customize it:
+
+------------------------------------------------------------------------------
+GLOBAL VARIABLE            DEFAULT VALUE   MEANING
+-------------------------- ---------------------------------------------------
+g:Filter_Escape            '\\'            escape sequence for the seq command
+                                            (see |textfilter-escaping|)
+g:Filter_FormatDate        '%x'            locale's date representation
+                                            (see |textfilter-date-time|)
+g:Filter_FormatTime        '%X'            locale's time representation
+                                            (see |textfilter-date-time|)
+g:Filter_HighlightAfterCol 80              see|textfilter-highlight-col| 
+g:Filter_RootMenu          'F&ilter.'      name of the root menu (see below)
+g:Filter_LoadMenus         'yes'           load menus at startup ('yes','no')
+g:Filter_TimestampFormat   '%y%m%d.%H%M%S' time stamp format
+                                           (see |textfilter-add-time-stamp|)
+
+The variable g:Filter_RootMenu, if set (in .vimrc or in .gvimrc), gives the
+name of the single Vim root menu entry. The default is 
+                       'F&ilter.'
+Note the terminating dot. The &-sign defines the following character as menu
+hotkey. The name and the hotkey can be changed to avoid conflicts with other
+menu names.
+
+==============================================================================
+5.  Release Notes                                   *textfilter-release-notes*
+==============================================================================
+
+See file README.textfilter .
+
+==============================================================================
+vim:tw=78:noet:ts=2:ft=help:norl:

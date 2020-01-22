@@ -1,0 +1,11 @@
+
+printf "%s \n" "Hallo,  Welt!"
+
+printf "%08i \n" 4711
+printf "%8i \n" 4711
+
+
+printf "%8.2f \n" 47,11
+
+# Als SU -> Sonst Error keine gueltige Zahl
+printf "%8.2f \n" 47.11

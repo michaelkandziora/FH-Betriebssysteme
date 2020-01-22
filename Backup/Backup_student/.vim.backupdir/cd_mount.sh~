@@ -1,0 +1,84 @@
+#!/bin/bash - 
+#===============================================================================
+#
+#          FILE: cd_mount.sh
+# 
+#         USAGE: ./cd_mount.sh 
+# 
+#   DESCRIPTION: 
+# 
+#       OPTIONS: ---
+#  REQUIREMENTS: ---
+#          BUGS: ---
+#         NOTES: ---
+#        AUTHOR: Your Name (), 
+#  ORGANIZATION: FH Südwestfalen, Iserlohn, Germany
+#       CREATED: 09.01.2020 16:04
+#      REVISION:  ---
+#===============================================================================
+
+set -o nounset                              # Treat unset variables as an error
+
+
+#-------------------------------------------------------------------------------
+# Variablen / Konstanten
+#-------------------------------------------------------------------------------
+
+image_dir=$HOME/CDs/
+mount_dir=$image_dir"mount/"
+file_type="image"
+file_name=""
+
+#-------------------------------------------------------------------------------
+# Images ermitteln
+#-------------------------------------------------------------------------------
+liste=$(find $image_dir -type f -name "[^.]*.$file_type")
+
+#-------------------------------------------------------------------------------
+# Kopieren 
+#-------------------------------------------------------------------------------
+zaehler=0
+
+
+  for image in $liste 
+  do 
+    if [ ! -f "$image" ] && [ ! -w "$image" ]
+    then
+      echo -e "\n\t"$image" ist kein Image oder nicht lesbar.\n"
+      exit 1
+    fi
+    
+    echo "Gefundenes Image: " $image
+		file_name=$(echo $image | sed -e 's:[^*]*/::g' | sed -e "s:.$file_type::g")
+		
+		if [ -d "$mount_dir" ]
+		then
+			echo "Mount Ordner gefunden: $mount_dir"
+		else
+			echo -e "Mount Ordner nicht gefunden.\nMount Ordner wird erstellt:"
+			mkdir $mount_dir
+		if [ -d "$mount_dir$file_name" ]
+		then
+			echo "$mount_dir$file_name existiert bereits"
+		else
+			mkdir $mount_dir$file_name
+
+			if [ $? -eq 0 ]
+			then
+				echo "Mountpoint erstellt: $mount_dir$file_name"
+			fi
+
+			fuseiso "$image" "$mount_dir$file_name"
+			if [ $? -eq 0 ]
+			then
+				((zaehler++))
+			fi
+		fi
+  done
+
+
+#-------------------------------------------------------------------------------
+# Kontrollausgabe
+#-------------------------------------------------------------------------------
+echo -e "\n${zaehler} Images wurden eingehaengt.\n"
+

@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/home/mehner/AI_Programmierung-C++2'
+let g:netrw_dirhist_2='/home/mehner/AI_Programmierung-C++2/Klausuren'
+let g:netrw_dirhist_3='/home/mehner/AI_Programmierung-C++2/Klausuren/2014-02'
+let g:netrw_dirhist_4='/home/mehner/AI_Programmierung-C++2/Klausuren/2014-02/Musterloesungen'
+let g:netrw_dirhist_5='/home/student'
+let g:netrw_dirhist_6='/home/student/Musterloesungen'

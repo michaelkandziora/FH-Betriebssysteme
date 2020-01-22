@@ -1,0 +1,15 @@
+[Desktop Entry]
+X-SuSE-translate=true
+Exec=kinfocenter
+Icon=hwinfo
+Type=Application
+X-DocPath=kinfocenter/index.html
+X-KDE-StartupNotify=true
+OnlyShowIn=KDE;
+
+Name=KInfoCenter
+GenericName=Info Center
+
+X-DBUS-StartupType=Unique
+Categories=Qt;KDE;System;
+

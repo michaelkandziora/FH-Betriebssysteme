@@ -1,0 +1,10 @@
+
+# Bitte geben Sie eine Commit-Beschreibung für Ihre Änderungen ein. Zeilen,
+# die mit '#' beginnen, werden ignoriert, und eine leere Beschreibung
+# bricht den Commit ab.
+# Auf Branch master
+# zum Commit vorgemerkte Änderungen:
+#   (benutzen Sie "git reset HEAD <Datei>..." zum Entfernen aus der Staging-Area)
+#
+#	gelöscht:    Kapitel_4/user-add-2.sh
+#

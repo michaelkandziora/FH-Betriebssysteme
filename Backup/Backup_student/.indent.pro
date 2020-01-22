@@ -1,0 +1,12 @@
+--blank-lines-after-procedures
+--brace-indent 0
+--comment-indentation 49
+--declaration-comment-column 49
+--declaration-indentation 10
+--space-after-parentheses
+--swallow-optional-blank-lines
+--tab-size 2
+--no-tabs
+--braces-on-if-line
+--braces-on-struct-decl-line
+

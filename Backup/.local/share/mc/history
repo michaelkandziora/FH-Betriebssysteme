@@ -1,0 +1,37 @@
+[:select_cmd: Select ]
+0=*.html
+
+[inp:fishlink_cmd: Shell link to machine ]
+0=mehner@rml3.fh-swf.de:
+
+[input-def]
+0=*
+
+[inpmc.hotlist.add]
+0=/home/student
+
+[input2]
+0=/home/student/
+1=/home/student/.vim/autoload/mmtemplates/
+
+[cmdline]
+0=g dvim
+1=g
+2=[21~
+3=ps
+4=
+
+[Dir Hist New Right Panel]
+0=/home/student/.vim
+1=/home
+2=/
+3=/run
+4=/run/media
+5=/run/media/student
+6=/run/media/student/KINGSTON
+7=/run/media/student/KINGSTON/Druckauftrag.Zirbes
+8=/run/media/student/KINGSTON/Druckauftrag.Zirbes/30x20_cm
+9=/home/student
+
+[Dir Hist New Left Panel]
+0=/home/student

@@ -1,0 +1,4 @@
+C-Support: Unused variable deleted.
+
+- Unused variable deleted.
+- Snippet comment improved.

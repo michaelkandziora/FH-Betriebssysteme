@@ -1,0 +1,35 @@
+--langdef=conf
+--langmap=conf:.doxy Doxyfile
+--regex-conf=/^[[:space:]]*([^#].*+)[[:space:]]*=.*/\1/c,conf/
+
+--langdef=template
+--langmap=template:.template Template
+--regex-template=/^==\s+([^=]+)\s+==\s*(\s+==\s+([^=]+)\s+==)?/\1/t,template/
+
+--langdef=help
+--langmap=help:.txt
+--regex-help=/^([[:digit:]]+(\.[[:digit:]]+)*.+)(\s+\*[^|][^\S]+\*)?$/\1/h,help/
+--regex-help=/\*([[:alnum:]-]+)\*/\1/l,label/
+
+--langmap=perl:+.pod
+--regex-perl=/^=head1[[:space:]]*(.+)/\1/o,pod/
+--regex-perl=/^=head2[[:space:]]*(.+)$/. \1/o,pod/
+--regex-perl=/^=head3[[:space:]]*(.+)$/.. \1/o,pod/
+--regex-perl=/^=head4[[:space:]]*(.+)$/... \1/o,pod/
+--regex-perl=/^=for[[:space:]]+([^:]+):(.*)$/*\1:\2/o,pod/
+--regex-perl=/^__(DATA|END)__$/__\1__/l,labels/
+--regex-perl=/# :([[:upper:]]+\s*):([^[:space:]]+) ([^[:space:]]+):(.*)$/\1 \2/k,comments/
+
+--regex-make=/^([^:# \t]+)[ \t]*:($|[^=]+)/\1/t,targets/
+--regex-make=/^include[ \t]+(.+)/\1/i,includes/
+
+--langdef=qmake
+--langmap=qmake:+.pro
+--regex-qmake=/^([[:upper:]_]+)/\1/t,SystemVariables/
+
+--regex-c=/:TODO:([^[:space:]]+) ([^[:space:]]+) (.+)$/\1 '\3'/o,todo/
+--regex-c++=/:TODO:([^[:space:]]+) ([^[:space:]]+) (.*)$/\1 '\3'/o,todo/
+
+--regex-sh=/^declare[[:space:]](-[aAilrtux])?+[[:space:]]+([^[:space:]=]+)/\2/g,globals/
+--regex-sh=/:TODO:([^[:space:]]+) ([^[:space:]]+) (.*)$/\1 '\3'/o,todo/
+
